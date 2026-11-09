@@ -108,89 +108,7 @@
   }
 }
 
-/* Hero */
-.hero-backdrop {
-  overflow: hidden;
-  background-color: var(--color-cream);
-  background-image:
-    radial-gradient(
-      ellipse 62% 58% at 78% 28%,
-      rgba(101, 222, 241, 0.42),
-      transparent 66%
-    ),
-    radial-gradient(
-      ellipse 52% 52% at 10% 4%,
-      rgba(168, 220, 209, 0.55),
-      transparent 68%
-    ),
-    radial-gradient(
-      ellipse 46% 48% at 52% 100%,
-      rgba(220, 226, 200, 0.5),
-      transparent 70%
-    ),
-    radial-gradient(
-      ellipse 38% 42% at 98% 86%,
-      rgba(249, 105, 0, 0.14),
-      transparent 72%
-    );
-}
-
-.hero-backdrop::before,
-.hero-backdrop::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.6;
-  will-change: transform;
-}
-
-.hero-backdrop::before {
-  top: -14%;
-  right: -10%;
-  width: min(52vw, 680px);
-  aspect-ratio: 1;
-  background: radial-gradient(
-    circle at 32% 32%,
-    rgba(101, 222, 241, 0.85),
-    rgba(101, 222, 241, 0) 70%
-  );
-  animation: hero-aurora-a 19s ease-in-out infinite alternate;
-}
-
-.hero-backdrop::after {
-  bottom: -20%;
-  left: -12%;
-  width: min(48vw, 620px);
-  aspect-ratio: 1;
-  background: radial-gradient(
-    circle at 50% 50%,
-    rgba(168, 220, 209, 0.8),
-    rgba(168, 220, 209, 0) 70%
-  );
-  animation: hero-aurora-b 24s ease-in-out infinite alternate;
-}
-
-@keyframes hero-aurora-a {
-  from {
-    transform: translate3d(0, 0, 0) scale(1);
-  }
-
-  to {
-    transform: translate3d(-5%, 6%, 0) scale(1.1);
-  }
-}
-
-@keyframes hero-aurora-b {
-  from {
-    transform: translate3d(0, 0, 0) scale(1.05);
-  }
-
-  to {
-    transform: translate3d(6%, -5%, 0) scale(0.95);
-  }
-}
-
+/* Hero — banner PSB (Swiper) */
 .hero-dots {
   background-image: radial-gradient(rgba(13, 47, 56, 0.22) 1.1px, transparent 1.1px);
   background-size: 20px 20px;
@@ -206,31 +124,8 @@
   );
 }
 
-.hero-student {
-  -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 14%);
-  mask-image: linear-gradient(to top, transparent 0%, #000 14%);
-}
-
-.type-caret {
-  display: inline-block;
-  width: 0.055em;
-  height: 0.82em;
-  margin-left: 0.08em;
-  vertical-align: -0.06em;
-  background: var(--color-gold);
-  animation: type-caret-blink 1s steps(1) infinite;
-}
-
-@keyframes type-caret-blink {
-  0%,
-  49% {
-    opacity: 1;
-  }
-
-  50%,
-  100% {
-    opacity: 0;
-  }
+.psb-swiper .swiper-slide {
+  background: var(--color-cream);
 }
 
 /* Kinetic fullscreen navigation */

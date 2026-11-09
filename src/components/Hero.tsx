@@ -1,276 +1,236 @@
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import {
-  ArrowRight,
-  ArrowUpRight,
-} from 'lucide-react'
-import studentLaptop from '../assets/img/Student with Laptop in Academy Uniform.png'
-import studentCamera from '../assets/img/wkwk.png'
-import studentBook from '../assets/img/zufar.png'
-import logoIf from '../assets/img/IF LOGO if.png'
-import logoSmk from '../assets/img/SMK.png'
-import { siteInfo } from '../data/navigation'
+import { useEffect, useRef, useState } from 'react'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { A11y, Autoplay, Keyboard } from 'swiper/modules'
+import type { Swiper as SwiperInstance } from 'swiper'
+import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
+import 'swiper/css'
+import { cn } from '@/lib/utils'
+import slide1 from '../assets/img/PSB/1.png'
+import slide2 from '../assets/img/PSB/2.png'
+import slide3 from '../assets/img/PSB/3.png'
+import slide4 from '../assets/img/PSB/4.png'
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 22 },
-  visible: { opacity: 1, y: 0 },
-}
+const banners = [
+  {
+    src: slide1,
+    alt: 'PSB SMK IT Ihsanul Fikri tahun ajaran 2027/2028 — jurusan TJKT, PPLG, DKV dan informasi beasiswa',
+  },
+  {
+    src: slide2,
+    alt: 'Jurusan TJKT — Teknik Jaringan Komputer dan Telekomunikasi beserta kompetensi keahlian',
+  },
+  {
+    src: slide3,
+    alt: 'Jurusan PPLG — Pengembangan Perangkat Lunak dan Gim beserta kompetensi keahlian',
+  },
+  {
+    src: slide4,
+    alt: 'Jurusan DKV — Desain Komunikasi Visual beserta kompetensi keahlian',
+  },
+]
 
-const stagger = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
-}
+const arrowBase =
+  'absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink shadow-[0_10px_24px_-14px_rgba(13,47,56,0.55)] backdrop-blur-sm transition hover:bg-white min-[768px]:grid'
 
-const headlinePhrases = [
-  { text: 'SMK IT Ihsanul Fikri', kind: 'school' },
-  { text: 'Terampil.', kind: 'value' },
-  { text: 'Mandiri.', kind: 'value' },
-  { text: 'Qur’ani.', kind: 'accent' },
-] as const
-
-function TypewriterHeadline() {
+export default function Hero() {
+  const [swiper, setSwiper] = useState<SwiperInstance | null>(null)
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [lightbox, setLightbox] = useState<number | null>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
   const [reducedMotion] = useState(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
-  const [started, setStarted] = useState(reducedMotion)
-  const [activeLine, setActiveLine] = useState(
-    reducedMotion ? headlinePhrases.length : 0,
-  )
-  const [typed, setTyped] = useState<string[]>(() =>
-    headlinePhrases.map((phrase) => (reducedMotion ? phrase.text : '')),
-  )
-  const done = typed.every(
-    (value, index) => value.length === headlinePhrases[index].text.length,
-  )
 
   useEffect(() => {
-    if (started) return
-    const timer = window.setTimeout(() => setStarted(true), 450)
-    return () => window.clearTimeout(timer)
-  }, [started])
+    if (lightbox === null) return
 
-  useEffect(() => {
-    if (!started || done) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeRef.current?.focus()
 
-    const phrase = headlinePhrases[activeLine]
-    if (!phrase) return
-
-    const visible = typed[activeLine] ?? ''
-    if (visible.length < phrase.text.length) {
-      const timer = window.setTimeout(() => {
-        setTyped((current) =>
-          current.map((value, index) =>
-            index === activeLine
-              ? phrase.text.slice(0, value.length + 1)
-              : value,
-          ),
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setLightbox(null)
+        return
+      }
+      if (event.key === 'ArrowLeft') {
+        setLightbox((current) =>
+          current === null ? current : (current - 1 + banners.length) % banners.length,
         )
-      }, phrase.kind === 'school' ? 58 : 72)
-      return () => window.clearTimeout(timer)
+      }
+      if (event.key === 'ArrowRight') {
+        setLightbox((current) =>
+          current === null ? current : (current + 1) % banners.length,
+        )
+      }
     }
 
-    if (activeLine < headlinePhrases.length - 1) {
-      const timer = window.setTimeout(
-        () => setActiveLine((index) => index + 1),
-        340,
-      )
-      return () => window.clearTimeout(timer)
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
     }
-  }, [activeLine, done, started, typed])
+  }, [lightbox])
+
+  const current = lightbox === null ? null : banners[lightbox]
 
   return (
-    <h1
-      id="hero-title"
-      className="font-jargon text-[clamp(3.2rem,16.5vw,4.25rem)] font-bold leading-[0.98] tracking-[-0.02em] text-ink min-[640px]:text-[clamp(3.9rem,8.5vw,5.2rem)] lg:text-[clamp(2.9rem,6.1vw,5.4rem)]"
-    >
-      <span className="sr-only">
-        SMK IT Ihsanul Fikri. Terampil. Mandiri. Qur’ani.
-      </span>
-      <span aria-hidden="true">
-        {headlinePhrases.map((phrase, index) => {
-          const isSchool = phrase.kind === 'school'
-          const isAccent = phrase.kind === 'accent'
-          const isActive = !done && started && index === activeLine
+    <section id="home" aria-label="Banner Penerimaan Siswa Baru" className="relative bg-cream">
+      <h1 className="sr-only">
+        SMK IT Ihsanul Fikri — Penerimaan Siswa Baru tahun ajaran 2027/2028
+      </h1>
 
-          return (
-            <span
-              key={phrase.text}
-              className={[
-                'block whitespace-nowrap',
-                isSchool
-                  ? 'mb-[0.2em] text-[0.42em] leading-[1.12] tracking-[-0.01em] text-ink/65'
-                  : '',
-                isAccent ? 'text-gold-deep' : '',
-              ].join(' ')}
-            >
-              <span className="relative inline-block">
-                <span className="invisible">{phrase.text}</span>
-                <span className="absolute inset-0">
-                  {typed[index]}
-                  {isActive && <span className="type-caret" />}
-                </span>
-                {isAccent && (
-                  <motion.svg
-                    className="absolute -bottom-1.5 left-0 h-[11px] w-full text-gold"
-                    viewBox="0 0 260 12"
-                    fill="none"
-                    preserveAspectRatio="none"
-                    aria-hidden="true"
-                    initial={false}
-                    animate={{ scaleX: done ? 1 : 0 }}
-                    transition={{ duration: 0.5, ease: 'easeOut' }}
-                    style={{ transformOrigin: 'left' }}
-                  >
-                    <path
-                      d="M3 8.5C68 2.5 191 2 257 6.5"
-                      stroke="currentColor"
-                      strokeWidth="6"
-                      strokeLinecap="round"
-                    />
-                  </motion.svg>
-                )}
-              </span>
-            </span>
-          )
-        })}
-      </span>
-    </h1>
-  )
-}
-
-export default function Hero() {
-  return (
-    <section
-      id="home"
-      aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[calc(100svh-89px)] items-center overflow-hidden bg-cream max-[640px]:min-h-[calc(100svh-71px)]"
-    >
-      <div className="hero-backdrop pointer-events-none absolute inset-0" aria-hidden="true" />
-
-      <div className="relative mx-auto grid w-full max-w-[1280px] items-center gap-10 px-7 pb-16 pt-8 max-[900px]:px-5 max-[900px]:gap-4 max-[640px]:pb-14 max-[640px]:pt-6 lg:grid-cols-[0.86fr_1.14fr] lg:gap-6 lg:pb-20 lg:pt-10">
-        <motion.div
-          className="relative z-10 min-w-0 max-w-[560px]"
-          variants={stagger}
-          initial="hidden"
-          animate="visible"
-        >
-          <TypewriterHeadline />
-
-          <motion.div
-            className="mt-7 flex flex-wrap items-center gap-3 max-[480px]:gap-2.5"
-            variants={fadeUp}
-            transition={{ duration: 0.55, ease: 'easeOut' }}
+      <div className="mx-auto w-full max-w-[1500px]">
+        <div className="relative">
+          <Swiper
+            className="psb-swiper aspect-[1500/470] w-full select-none"
+            modules={[Autoplay, Keyboard, A11y]}
+            loop
+            speed={650}
+            autoplay={
+              reducedMotion
+                ? false
+                : { delay: 6000, disableOnInteraction: false, pauseOnMouseEnter: true }
+            }
+            keyboard={{ enabled: true }}
+            a11y={{
+              enabled: true,
+              prevSlideMessage: 'Banner sebelumnya',
+              nextSlideMessage: 'Banner berikutnya',
+            }}
+            onSwiper={setSwiper}
+            onSlideChange={(instance) => setActiveSlide(instance.realIndex)}
           >
-            <a
-              className="group inline-flex items-center gap-2 rounded-md bg-gold px-6 py-3.5 text-[13.5px] font-extrabold tracking-[0.01em] text-ink shadow-[0_16px_32px_-16px_rgba(249,105,0,0.7)] transition hover:-translate-y-0.5 hover:bg-magenta hover:text-ink hover:shadow-[0_20px_36px_-16px_rgba(241,127,41,0.5)] max-[480px]:px-5"
-              href={siteInfo.ppdbUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Daftar PPDB
-              <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" strokeWidth={2.2} />
-            </a>
+            {banners.map((banner, index) => (
+              <SwiperSlide key={banner.src}>
+                <button
+                  type="button"
+                  className="group relative block h-full w-full cursor-zoom-in"
+                  onClick={() => setLightbox(index)}
+                  aria-label={`Perbesar banner ${index + 1} dari ${banners.length}`}
+                >
+                  <img
+                    src={banner.src}
+                    alt={banner.alt}
+                    className="h-full w-full object-cover"
+                    draggable={false}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                    fetchPriority={index === 0 ? 'high' : 'auto'}
+                  />
+                  <span className="pointer-events-none absolute right-2.5 bottom-2.5 inline-flex items-center justify-center gap-1.5 rounded-full bg-ink/65 px-2.5 py-1 text-[9.5px] font-bold tracking-[0.1em] text-cream uppercase opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100 max-[640px]:h-8 max-[640px]:w-8 max-[640px]:p-0 max-[640px]:opacity-100 min-[640px]:right-3 min-[640px]:bottom-3 min-[640px]:px-3 min-[640px]:py-1.5 min-[640px]:text-[10.5px]">
+                    <Maximize2
+                      className="h-3 w-3 min-[640px]:h-3 min-[640px]:w-3"
+                      aria-hidden="true"
+                    />
+                    <span className="max-[640px]:hidden">Perbesar</span>
+                  </span>
+                </button>
+              </SwiperSlide>
+            ))}
+          </Swiper>
 
-            <a
-              className="group inline-flex items-center gap-2 rounded-md border border-ink/15 bg-white/55 px-5 py-3.5 text-[13.5px] font-bold text-ink backdrop-blur-sm transition hover:border-ink hover:bg-ink hover:text-cream max-[480px]:px-4"
-              href="#jurusan"
-            >
-              Kenali Jurusan
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
-            </a>
-          </motion.div>
-        </motion.div>
+          <button
+            type="button"
+            aria-label="Banner sebelumnya"
+            onClick={() => swiper?.slidePrev()}
+            className={`${arrowBase} left-3`}
+          >
+            <ChevronLeft className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            aria-label="Banner berikutnya"
+            onClick={() => swiper?.slideNext()}
+            className={`${arrowBase} right-3`}
+          >
+            <ChevronRight className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
+          </button>
+        </div>
 
-        <motion.div
-          className="relative mx-auto h-[clamp(370px,42vw,580px)] w-full min-w-0 max-w-[680px] max-[900px]:mt-2 max-[900px]:h-[440px] max-[640px]:h-[320px] max-[480px]:h-[280px] max-[360px]:h-[250px]"
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut', delay: 0.12 }}
+        <div
+          className="flex items-center justify-center gap-2 py-4"
+          role="group"
+          aria-label="Navigasi banner"
         >
-          <div className="absolute bottom-[1%] left-1/2 h-[93%] w-[93%] -translate-x-1/2 rounded-t-[999px] rounded-b-[42px] bg-[linear-gradient(155deg,rgba(220,226,200,0.82)_0%,rgba(168,220,209,0.72)_38%,rgba(101,222,241,0.78)_100%)] backdrop-blur-[2px] shadow-[0_50px_90px_-48px_rgba(13,47,56,0.4)]">
-            <div className="absolute inset-2.5 rounded-t-[999px] rounded-b-[34px] border border-white/35" aria-hidden="true" />
-            <div className="absolute inset-x-0 bottom-0 h-28 rounded-b-[42px] bg-gradient-to-t from-ink/15 to-transparent" aria-hidden="true" />
-          </div>
+          {banners.map((banner, index) => {
+            const isActive = activeSlide === index
 
-          <div className="hero-dots absolute inset-x-0 top-0 h-[74%] w-[78%] opacity-60" aria-hidden="true" />
-          <div
-            className="absolute right-[5%] top-[7%] h-24 w-24 rounded-full border-[10px] border-magenta/20 max-[640px]:h-16 max-[640px]:w-16 max-[640px]:border-[7px]"
-            aria-hidden="true"
-          />
-
-          <div
-            className="absolute bottom-1 left-1/2 z-[2] h-5 w-[48%] -translate-x-1/2 rounded-full bg-ink/20 blur-lg"
-            aria-hidden="true"
-          />
-
-          <div className="relative z-[3] flex h-full items-end justify-center -mx-4 max-[640px]:-mx-1">
-            {/* Decorative elements */}
-            <motion.img
-              src={logoIf}
-              alt=""
-              className="absolute -top-6 -left-6 h-24 w-24 opacity-30 rotate-12 pointer-events-none max-[640px]:h-16 max-[640px]:w-16 max-[640px]:-top-4 max-[640px]:-left-4"
-              aria-hidden="true"
-              initial={{ opacity: 0, y: -20, rotate: 0 }}
-              animate={{ 
-                opacity: 0.3, 
-                y: [0, -8, 0], 
-                x: [0, 4, 0], 
-                rotate: [12, 14, 12] 
-              }}
-              transition={{ 
-                duration: 6, 
-                ease: 'easeInOut', 
-                delay: 0.3,
-                repeat: Infinity,
-                repeatType: 'reverse'
-              }}
-            />
-            <motion.img
-              src={logoSmk}
-              alt=""
-              className="absolute -top-4 right-4 h-20 w-20 opacity-25 -rotate-6 pointer-events-none max-[640px]:h-14 max-[640px]:w-14 max-[640px]:-top-2 max-[640px]:right-2"
-              aria-hidden="true"
-              initial={{ opacity: 0, y: -20, rotate: 0 }}
-              animate={{ 
-                opacity: 0.25, 
-                y: [0, 10, 0], 
-                x: [0, -5, 0], 
-                rotate: [-6, -8, -6] 
-              }}
-              transition={{ 
-                duration: 7, 
-                ease: 'easeInOut', 
-                delay: 0.5,
-                repeat: Infinity,
-                repeatType: 'reverse'
-              }}
-            />
-            <div className="relative z-[3] flex h-full w-[38%] shrink-0 items-end justify-center max-[640px]:w-[34%]">
-              <img
-                src={studentCamera}
-                alt="Siswa SMK IT Ihsanul Fikri memegang kamera"
-                className="hero-student pointer-events-none h-[122%] w-auto max-w-none origin-bottom translate-x-[6%] object-contain drop-shadow-[0_24px_28px_rgba(13,47,56,0.22)] min-[640px]:h-[140%] lg:h-[125%] max-[400px]:h-[105%] max-[640px]:h-[155%] max-[640px]:translate-x-[3%]"
+            return (
+              <button
+                key={banner.src}
+                type="button"
+                onClick={() => swiper?.slideToLoop(index)}
+                aria-label={`Buka banner ${index + 1} dari ${banners.length}`}
+                aria-current={isActive ? 'true' : undefined}
+                className={cn(
+                  'h-2 rounded-full transition-all duration-300',
+                  isActive ? 'w-8 bg-gold' : 'w-2 bg-ink/25 hover:bg-ink/50',
+                )}
               />
-            </div>
+            )
+          })}
+        </div>
 
-            <div className="relative z-[2] flex h-full w-[34%] shrink-0 items-end justify-center -ml-18 max-[640px]:-ml-10 max-[640px]:w-[28%]">
-              <img
-                src={studentBook}
-                alt="Siswa SMK IT Ihsanul Fikri membawa buku dan tas"
-                className="hero-student pointer-events-none h-[88%] w-auto max-w-none origin-bottom translate-x-[12%] object-contain drop-shadow-[0_24px_28px_rgba(13,47,56,0.22)] min-[640px]:h-[94%] lg:h-[88%] max-[640px]:h-[125%] max-[640px]:translate-x-[6%]"
-              />
-            </div>
-
-            <div className="relative z-[3] flex h-full w-[38%] shrink-0 items-end justify-center -ml-6 max-[640px]:-ml-5 max-[640px]:w-[34%]">
-              <img
-                src={studentLaptop}
-                alt="Siswa SMK IT Ihsanul Fikri membawa laptop"
-                className="hero-student pointer-events-none h-[90%] w-auto max-w-none origin-bottom translate-x-[8%] object-contain drop-shadow-[0_28px_32px_rgba(13,47,56,0.22)] min-[640px]:h-[98%] lg:h-[92%] max-[640px]:h-[125%] max-[640px]:translate-x-[5%]"
-              />
-            </div>
-          </div>
-        </motion.div>
+        <p className="sr-only" aria-live="polite">
+          Banner {activeSlide + 1} dari {banners.length}
+        </p>
       </div>
+
+      {current && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Banner PSB ${(lightbox ?? 0) + 1} dari ${banners.length}`}
+          className="fixed inset-0 z-[300] flex items-center justify-center bg-ink/90 p-4 backdrop-blur-sm"
+          onClick={() => setLightbox(null)}
+        >
+          <button
+            type="button"
+            ref={closeRef}
+            onClick={() => setLightbox(null)}
+            aria-label="Tutup banner"
+            className="absolute top-4 right-4 z-10 grid h-11 w-11 place-items-center rounded-full bg-cream/10 text-cream transition hover:bg-cream/20"
+          >
+            <X className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
+          </button>
+
+          <div
+            className="max-h-full w-full overflow-auto overscroll-contain"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <img
+              src={current.src}
+              alt={current.alt}
+              className="mx-auto block h-auto w-full min-w-[720px] max-w-[1500px] rounded-md shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)] sm:min-w-0"
+            />
+          </div>
+
+          <button
+            type="button"
+            aria-label="Banner sebelumnya"
+            onClick={(event) => {
+              event.stopPropagation()
+              setLightbox((value) =>
+                value === null ? value : (value - 1 + banners.length) % banners.length,
+              )
+            }}
+            className="absolute top-1/2 left-3 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-cream/10 text-cream transition hover:bg-cream/20 min-[768px]:grid"
+          >
+            <ChevronLeft className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            aria-label="Banner berikutnya"
+            onClick={(event) => {
+              event.stopPropagation()
+              setLightbox((value) => (value === null ? value : (value + 1) % banners.length))
+            }}
+            className="absolute top-1/2 right-3 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-cream/10 text-cream transition hover:bg-cream/20 min-[768px]:grid"
+          >
+            <ChevronRight className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
+          </button>
+        </div>
+      )}
     </section>
   )
 }
