@@ -1,6 +1,5 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import SambutanKepalaSekolah from './components/SambutanKepalaSekolah'
 
 function App() {
   return (
@@ -8,7 +7,6 @@ function App() {
       <Navbar />
       <main className="bg-cream" aria-label="Konten utama">
         <Hero />
-        <SambutanKepalaSekolah />
       </main>
     </>
   )

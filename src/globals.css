@@ -108,26 +108,6 @@
   }
 }
 
-/* Hero — banner PSB (Swiper) */
-.hero-dots {
-  background-image: radial-gradient(rgba(13, 47, 56, 0.22) 1.1px, transparent 1.1px);
-  background-size: 20px 20px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 64% 60% at 52% 45%,
-    #000 0%,
-    transparent 74%
-  );
-  mask-image: radial-gradient(
-    ellipse 64% 60% at 52% 45%,
-    #000 0%,
-    transparent 74%
-  );
-}
-
-.psb-swiper .swiper-slide {
-  background: var(--color-cream);
-}
-
 /* Kinetic fullscreen navigation */
 .kinetic-nav .fullscreen-menu-container {
   position: fixed;
