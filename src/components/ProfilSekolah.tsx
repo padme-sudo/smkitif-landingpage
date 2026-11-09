@@ -1,6 +1,8 @@
-import { useId, useState } from 'react'
+import { useId, useLayoutEffect, useRef, useState } from 'react'
+import { animate, stagger } from 'animejs'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useReveal } from '@/lib/useReveal'
 import gedung from '../assets/img/gedung.png'
 
 const paragrafPembuka = [
@@ -24,27 +26,60 @@ const identitas = [
 export default function ProfilSekolah() {
   const [expanded, setExpanded] = useState(false)
   const panelId = useId()
+  const sectionRef = useRef<HTMLElement | null>(null)
+  const panelRef = useRef<HTMLDivElement | null>(null)
+
+  useReveal(sectionRef)
+
+  useLayoutEffect(() => {
+    if (!expanded || !panelRef.current) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const items = panelRef.current.querySelectorAll<HTMLElement>('[data-panel-item]')
+    const animation = animate(items, {
+      opacity: [0, 1],
+      y: [14, 0],
+      duration: 520,
+      delay: stagger(70),
+      ease: 'out(3)',
+    })
+
+    return () => {
+      animation.revert()
+    }
+  }, [expanded])
 
   return (
-    <section id="profil" aria-labelledby="profil-title" className="bg-white">
+    <section
+      ref={sectionRef}
+      id="profil"
+      aria-labelledby="profil-title"
+      className="bg-white"
+    >
       <div className="mx-auto w-full max-w-[1200px] px-5 py-16 sm:px-8 md:py-20 lg:py-24">
         <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
           <div>
             <header>
               <h2
                 id="profil-title"
+                data-reveal
                 className="text-[30px] leading-[1.2] font-bold tracking-tight text-ink sm:text-[34px] lg:text-[36px]"
               >
                 Profil Sekolah
               </h2>
-              <p className="mt-1.5 text-[12.5px] font-medium tracking-[0.18em] text-olive uppercase lg:text-[15px]">
+              <p
+                data-reveal
+                className="mt-1.5 text-[12.5px] font-medium tracking-[0.18em] text-olive uppercase lg:text-[15px]"
+              >
                 SMK IT Ihsanul Fikri Mungkid
               </p>
             </header>
 
             <div className="mt-6 space-y-4 text-[15.5px] leading-[1.75] text-olive md:mt-8 md:text-justify lg:text-[17px]">
               {paragrafPembuka.map((paragraf) => (
-                <p key={paragraf.slice(0, 24)}>{paragraf}</p>
+                <p key={paragraf.slice(0, 24)} data-reveal>
+                  {paragraf}
+                </p>
               ))}
             </div>
 
@@ -53,6 +88,7 @@ export default function ProfilSekolah() {
               onClick={() => setExpanded((value) => !value)}
               aria-expanded={expanded}
               aria-controls={panelId}
+              data-reveal
               className="group mt-5 inline-flex items-center gap-1.5 text-[15px] font-semibold text-gold-deep transition-colors hover:text-gold"
             >
               <span className="underline decoration-gold/40 decoration-1 underline-offset-4 transition-colors group-hover:decoration-gold">
@@ -69,6 +105,7 @@ export default function ProfilSekolah() {
 
             <div
               id={panelId}
+              ref={panelRef}
               aria-hidden={!expanded}
               className={cn(
                 'grid transition-[grid-template-rows] duration-500 ease-out',
@@ -78,11 +115,16 @@ export default function ProfilSekolah() {
               <div className="overflow-hidden">
                 <div className="space-y-4 pt-5 text-[15.5px] leading-[1.75] text-olive md:text-justify lg:text-[17px]">
                   {paragrafLanjutan.map((paragraf) => (
-                    <p key={paragraf.slice(0, 24)}>{paragraf}</p>
+                    <p key={paragraf.slice(0, 24)} data-panel-item>
+                      {paragraf}
+                    </p>
                   ))}
                 </div>
 
-                <dl className="mt-7 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-ink/10 pt-6">
+                <dl
+                  data-panel-item
+                  className="mt-7 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-ink/10 pt-6"
+                >
                   {identitas.map(({ label, value }) => (
                     <div key={label}>
                       <dt className="text-[10.5px] font-bold tracking-[0.14em] text-olive uppercase">
@@ -96,7 +138,7 @@ export default function ProfilSekolah() {
             </div>
           </div>
 
-          <figure className="mx-auto w-full max-w-[560px]">
+          <figure data-reveal className="mx-auto w-full max-w-[560px]">
             <img
               src={gedung}
               alt="Gedung SMK IT Ihsanul Fikri Mungkid dikelilingi sawah dan pepohonan"

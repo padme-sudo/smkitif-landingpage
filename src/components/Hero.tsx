@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Autoplay, Keyboard } from 'swiper/modules'
 import type { Swiper as SwiperInstance } from 'swiper'
+import { createTimeline, stagger } from 'animejs'
 import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import 'swiper/css'
 import { cn } from '@/lib/utils'
@@ -37,9 +38,34 @@ export default function Hero() {
   const [activeSlide, setActiveSlide] = useState(0)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
+  const sliderRef = useRef<HTMLDivElement | null>(null)
+  const dotsRef = useRef<HTMLDivElement | null>(null)
   const [reducedMotion] = useState(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
+
+  useLayoutEffect(() => {
+    if (reducedMotion) return
+
+    const slider = sliderRef.current
+    if (!slider) return
+
+    const timeline = createTimeline({ defaults: { ease: 'out(3)' } })
+    timeline.add(slider, { opacity: [0, 1], y: [18, 0], duration: 900 })
+
+    const dots = dotsRef.current
+    if (dots) {
+      timeline.add(
+        Array.from(dots.children),
+        { opacity: [0, 1], y: [10, 0], duration: 420, delay: stagger(60) },
+        320,
+      )
+    }
+
+    return () => {
+      timeline.revert()
+    }
+  }, [reducedMotion])
 
   useEffect(() => {
     if (lightbox === null) return
@@ -81,7 +107,7 @@ export default function Hero() {
       </h1>
 
       <div className="w-full">
-        <div className="relative w-full">
+        <div className="relative w-full" ref={sliderRef}>
           <Swiper
             className="psb-swiper aspect-[1500/470] w-full select-none"
             modules={[Autoplay, Keyboard, A11y]}
@@ -148,6 +174,7 @@ export default function Hero() {
         </div>
 
         <div
+          ref={dotsRef}
           className="flex items-center justify-center gap-2 py-4"
           role="group"
           aria-label="Navigasi banner"
