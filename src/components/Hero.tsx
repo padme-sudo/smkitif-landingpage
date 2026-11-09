@@ -143,7 +143,7 @@ export default function Hero() {
     <section
       id="home"
       aria-labelledby="hero-title"
-      className="relative isolate flex min-h-[calc(100svh-83px)] items-center overflow-hidden bg-cream max-[640px]:min-h-[calc(100svh-71px)]"
+      className="relative isolate flex min-h-[calc(100svh-89px)] items-center overflow-hidden bg-cream max-[640px]:min-h-[calc(100svh-71px)]"
     >
       <div className="hero-backdrop pointer-events-none absolute inset-0" aria-hidden="true" />
 

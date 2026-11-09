@@ -11,9 +11,8 @@ export type NavItem = {
 }
 
 export const navItems: NavItem[] = [
-  { label: 'Home', href: '#home' },
   {
-    label: 'Profil',
+    label: 'Tentang Kami',
     href: '#profil',
     children: [
       {
@@ -39,29 +38,30 @@ export const navItems: NavItem[] = [
     ],
   },
   {
-    label: 'Jurusan',
+    label: 'Program Keahlian',
     href: '#jurusan',
     children: [
       {
-        label: 'TJKT',
+        label: 'Teknik Jaringan Komputer & Telekomunikasi',
         href: '#jurusan-tjkt',
-        description: 'Teknik Jaringan Komputer & Telekomunikasi',
+        description: 'TJKT',
       },
       {
-        label: 'PPLG',
+        label: 'Pengembangan Perangkat Lunak & Gim',
         href: '#jurusan-pplg',
-        description: 'Pengembangan Perangkat Lunak & Gim',
+        description: 'PPLG',
       },
       {
-        label: 'DKV',
+        label: 'Desain Komunikasi Visual',
         href: '#jurusan-dkv',
-        description: 'Desain Komunikasi Visual',
+        description: 'DKV',
       },
     ],
   },
-  { label: 'Berita', href: '#berita' },
+  { label: 'Program Unggulan', href: '#program-unggulan' },
+  { label: 'Kegiatan', href: '#kegiatan' },
   { label: 'Galeri', href: '#galeri' },
-  { label: 'Kontak', href: '#kontak' },
+  { label: 'Kontak Kami', href: '#kontak' },
 ]
 
 export const siteInfo = {

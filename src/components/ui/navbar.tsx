@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { MotionConfig, motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -19,104 +18,109 @@ type MenuProps = {
 }
 
 const Menu = ({ list, activeUrl, className }: MenuProps) => {
-  const [hovered, setHovered] = useState<number | null>(null)
+  const [openId, setOpenId] = useState<number | null>(null)
+  const navRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (openId === null) return
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenId(null)
+    }
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!navRef.current?.contains(event.target as Node)) setOpenId(null)
+    }
+
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('pointerdown', onPointerDown)
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      window.removeEventListener('pointerdown', onPointerDown)
+    }
+  }, [openId])
 
   return (
-    <MotionConfig transition={{ bounce: 0, type: 'tween' }}>
-      <nav
-        className={cn('relative hidden min-[1120px]:block', className)}
-        aria-label="Navigasi utama"
-      >
-        <ul className="flex items-center gap-1">
-          {list.map((item) => {
-            const isHovered = hovered === item.id
-            const active =
-              activeUrl === item.url || item.items?.some((child) => child.url === activeUrl)
-            const showDot = (!hovered && active) || (isHovered && !item.dropdown)
+    <nav
+      ref={navRef}
+      className={cn('relative hidden min-[1220px]:block', className)}
+      aria-label="Navigasi utama"
+    >
+      <ul className="flex items-center gap-0.5">
+        {list.map((item) => {
+          const active =
+            activeUrl === item.url ||
+            item.items?.some((child) => child.url === activeUrl) === true
+          const open = openId === item.id
+          const highlighted = active || open
 
-            return (
-              <li
-                key={item.id}
-                className="relative"
-                onMouseEnter={() => setHovered(item.id)}
-                onMouseLeave={() => setHovered(null)}
-                onFocus={() => setHovered(item.id)}
-                onBlur={(event) => {
-                  if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-                    setHovered(null)
-                  }
-                }}
+          return (
+            <li
+              key={item.id}
+              className="relative"
+              onMouseEnter={() => setOpenId(item.dropdown ? item.id : null)}
+              onMouseLeave={() => setOpenId(null)}
+              onFocus={() => setOpenId(item.dropdown ? item.id : null)}
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+                  setOpenId(null)
+                }
+              }}
+            >
+              <a
+                className={cn(
+                  'flex items-center gap-1.5 px-2.5 py-2.5 text-[12px] font-semibold whitespace-nowrap uppercase tracking-[0.07em] transition-colors duration-200',
+                  highlighted ? 'text-gold-deep' : 'text-ink/70 hover:text-ink',
+                )}
+                href={item.url}
+                aria-current={active ? 'page' : undefined}
+                aria-haspopup={item.dropdown ? 'true' : undefined}
+                aria-expanded={item.dropdown ? open : undefined}
+                onClick={() => setOpenId(null)}
               >
-                <a
-                  className={cn(
-                    'relative flex items-center justify-center gap-1 rounded-[10px] px-3.5 py-2.5 text-sm font-semibold whitespace-nowrap text-ink/70 transition-colors hover:bg-gold/10 hover:text-ink',
-                    (isHovered || active) && 'bg-gold/15 text-ink',
-                  )}
-                  href={item.url}
-                  aria-current={active ? 'page' : undefined}
-                  aria-haspopup={item.dropdown ? 'true' : undefined}
-                  aria-expanded={item.dropdown ? isHovered : undefined}
-                >
-                  {item.title}
-                  {item.dropdown && (
-                    <ChevronDown
-                      className={cn(
-                        'h-3.5 w-3.5 opacity-60 transition-transform duration-200',
-                        isHovered && 'rotate-180',
-                      )}
-                      aria-hidden="true"
-                    />
-                  )}
-                </a>
-
-                {showDot && (
-                  <motion.div
-                    layout
-                    layoutId="navbar-cursor"
-                    className="pointer-events-none absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-crimson"
+                {item.title}
+                {item.dropdown && (
+                  <ChevronDown
+                    className={cn(
+                      'h-3.5 w-3.5 transition-transform duration-200',
+                      open && 'rotate-180',
+                    )}
+                    strokeWidth={2.2}
+                    aria-hidden="true"
                   />
                 )}
+              </a>
 
-                {isHovered && item.dropdown && (
-                  <div
-                    className="absolute left-0 top-full z-20 pt-3"
-                    onMouseEnter={() => setHovered(item.id)}
-                    onMouseLeave={() => setHovered(null)}
-                  >
-                    <motion.div
-                      layout
-                      layoutId="navbar-cursor"
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      transition={{ bounce: 0 }}
-                      className="flex w-72 flex-col rounded-2xl border border-gold/40 bg-white p-2 shadow-[0_30px_60px_-30px_rgba(13,47,56,0.28)]"
-                    >
-                      {item.items?.map((nav) => (
+              {item.dropdown && (
+                <div
+                  className={cn(
+                    'absolute top-full left-0 z-20 min-w-[320px] border-t-2 border-gold/80 bg-[#f6f7f9] py-2 shadow-[0_28px_50px_-30px_rgba(13,47,56,0.35)] transition-all duration-200',
+                    open
+                      ? 'visible translate-y-0 opacity-100'
+                      : 'invisible -translate-y-1 opacity-0',
+                  )}
+                >
+                  <ul className="flex flex-col">
+                    {item.items?.map((nav) => (
+                      <li key={nav.id}>
                         <a
-                          key={`link-${nav.id}`}
+                          className="block px-6 py-3.5 text-[13.5px] leading-snug font-medium text-ink/75 transition-colors hover:bg-white hover:text-ink"
                           href={nav.url}
-                          className="flex flex-col gap-0.5 rounded-[10px] px-3 py-2.5 transition-colors hover:bg-gold/15"
-                          onClick={() => setHovered(null)}
+                          onClick={() => setOpenId(null)}
                         >
-                          <span className="text-[13.5px] font-semibold text-ink">
-                            {nav.title}
-                          </span>
-                          {nav.description && (
-                            <span className="text-[11.5px] leading-snug text-olive">
-                              {nav.description}
-                            </span>
-                          )}
+                          {nav.title}
                         </a>
-                      ))}
-                    </motion.div>
-                  </div>
-                )}
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
-    </MotionConfig>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
   )
 }
 

@@ -78,7 +78,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 88px;
+    scroll-padding-top: 96px;
   }
 
   body {
@@ -472,7 +472,7 @@
   position: relative;
   z-index: 1;
   font-family: var(--font-display);
-  font-size: clamp(2.35rem, 7.6vw, 4.9rem);
+  font-size: clamp(2.05rem, 6.8vw, 4.5rem);
   font-weight: 900;
   line-height: 1.02;
   letter-spacing: -0.035em;
@@ -635,7 +635,7 @@
   }
 
   .kinetic-nav .nav-link-text {
-    font-size: clamp(2rem, 7.2vw, 2.4rem);
+    font-size: clamp(1.75rem, 6.4vw, 2.2rem);
   }
 
   .kinetic-nav .nav-sublinks {
