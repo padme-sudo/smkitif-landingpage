@@ -1,17 +1,17 @@
 import { useId, useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import gedung from '../assets/img/gedung-profil.jpg'
+import gedung from '../assets/img/gedung.png'
 
 const paragrafPembuka = [
   'SMK IT Ihsanul Fikri Mungkid adalah salah satu Sekolah Menengah Kejuruan yang berada di Kecamatan Mungkid, Kabupaten Magelang, Jawa Tengah. Berada di sekitar Kawasan Strategis Nasional (KSN) Borobudur, keberadaannya menjadi potensi tersendiri untuk terus dikembangkan. Lokasinya di Jalan Tembus Blabak–Mendut KM.03 sangat strategis: di tepi jalan besar, dekat pasar, pusat perkantoran pemerintah, serta UMKM yang tumbuh pesat. Fasilitas sekolah meliputi bangunan sekolah, mini market, dan masjid yang juga menjadi tempat transit musafir untuk beristirahat dan shalat.',
-  'Siswa SMK IT Ihsanul Fikri Mungkid sebagian besar berasal dari luar Magelang, bahkan dari seluruh wilayah Indonesia — dari Papua sampai Sumatra. Latar belakang keluarga yang beragam menjadikan sekolah ini berpotensi dikembangkan sebagai pencetak wirausaha berbasis usaha siswa dan studi lanjut.',
+  'Siswa SMK IT Ihsanul Fikri Mungkid sebagian besar berasal dari luar Magelang, bahkan dari seluruh wilayah Indonesia dari Papua sampai Sumatra. Latar belakang keluarga yang beragam menjadikan sekolah ini berpotensi dikembangkan sebagai pencetak wirausaha berbasis usaha siswa dan studi lanjut.',
   'Pendidik dan tenaga kependidikan di SMK IT Ihsanul Fikri Mungkid sangat memadai. Seluruh guru berpendidikan sarjana dan mengajar sesuai latar belakang pendidikannya, sementara tenaga kependidikan minimal berpendidikan D3. Saat ini sekolah memiliki 115 siswa dalam satu program keahlian dan 4 rombel, dengan seluruh guru kejuruan sudah bersertifikat BNSP atau LSP.',
 ]
 
 const paragrafLanjutan = [
-  'Kurikulum Merdeka diterapkan dalam bentuk Mandiri Berubah dengan menggunakan perangkat ajar yang telah disediakan. Kurikulum operasional sekolah dikembangkan sesuai konteks dan kebutuhan peserta didik serta satuan pendidikan, dengan prinsip berpusat pada peserta didik, kontekstual, esensial, akuntabel, dan melibatkan berbagai pemangku kepentingan — termasuk orang tua, komite sekolah, serta dunia usaha dan dunia industri.',
-  'Sekolah yang berdiri pada 2011 ini diselenggarakan oleh Yayasan Tarbiyatul Mukmin Pabelan dan berstatus swasta. Program keahlian yang tersedia adalah Teknik Jaringan Komputer dan Telekomunikasi, dengan Mustain, S.Pd. sebagai kepala sekolah.',
+  'Kurikulum Merdeka diterapkan dalam bentuk Mandiri Berubah dengan menggunakan perangkat ajar yang telah disediakan. Kurikulum operasional sekolah dikembangkan sesuai konteks dan kebutuhan peserta didik serta satuan pendidikan, dengan prinsip berpusat pada peserta didik, kontekstual, esensial, akuntabel, dan melibatkan berbagai pemangku kepentingan termasuk orang tua, komite sekolah, serta dunia usaha dan dunia industri.',
+  'Sekolah yang berdiri pada 2011 ini diselenggarakan oleh Yayasan Tarbiyatul Mukmin Pabelan dan berstatus swasta. Program keahlian yang tersedia adalah Teknik Jaringan Komputer dan Telekomunikasi (TJKT), Pengembangan Perangkat Lunak & Gim (PPLG), Desain Komunikasi Visual (DKV). Dengan Bapak Mustain, S.Pd., Gr. sebagai kepala sekolah.',
 ]
 
 const identitas = [
@@ -96,20 +96,14 @@ export default function ProfilSekolah() {
             </div>
           </div>
 
-          <figure className="relative mx-auto w-full max-w-[560px]">
-            <div className="overflow-hidden rounded-[1.75rem] bg-white shadow-[0_32px_60px_-40px_rgba(13,47,56,0.45)]">
-              <img
-                src={gedung}
-                alt="Gedung SMK IT Ihsanul Fikri Mungkid dikelilingi sawah dan pepohonan"
-                loading="lazy"
-                decoding="async"
-                className="aspect-[4/5] h-full w-full object-cover"
-              />
-            </div>
-            <figcaption className="absolute bottom-5 left-5 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-[10.5px] font-bold tracking-[0.14em] text-ink uppercase shadow-[0_12px_24px_-16px_rgba(13,47,56,0.6)] backdrop-blur-sm">
-              <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-gold" />
-              Berdiri sejak 2011
-            </figcaption>
+          <figure className="mx-auto w-full max-w-[560px]">
+            <img
+              src={gedung}
+              alt="Gedung SMK IT Ihsanul Fikri Mungkid dikelilingi sawah dan pepohonan"
+              loading="lazy"
+              decoding="async"
+              className="h-auto w-full"
+            />
           </figure>
         </div>
       </div>
