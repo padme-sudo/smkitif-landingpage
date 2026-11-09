@@ -16,13 +16,6 @@ const paragrafLanjutan = [
   'Sekolah yang berdiri pada 2011 ini diselenggarakan oleh Yayasan Tarbiyatul Mukmin Pabelan dan berstatus swasta. Program keahlian yang tersedia adalah Teknik Jaringan Komputer dan Telekomunikasi (TJKT), Pengembangan Perangkat Lunak & Gim (PPLG), Desain Komunikasi Visual (DKV). Dengan Bapak Mustain, S.Pd., Gr. sebagai kepala sekolah.',
 ]
 
-const identitas = [
-  { label: 'NPSN', value: '69881816' },
-  { label: 'NSS', value: '322030809038' },
-  { label: 'Tahun Berdiri', value: '2011' },
-  { label: 'Kepala Sekolah', value: 'Mustain, S.Pd.' },
-]
-
 export default function ProfilSekolah() {
   const [expanded, setExpanded] = useState(false)
   const panelId = useId()
@@ -113,27 +106,13 @@ export default function ProfilSekolah() {
               )}
             >
               <div className="overflow-hidden">
-                <div className="space-y-4 pt-5 text-[15.5px] leading-[1.75] text-olive md:text-justify lg:text-[17px]">
+                <div className="space-y-4 pt-5 pb-1 text-[15.5px] leading-[1.75] text-olive md:text-justify lg:text-[17px]">
                   {paragrafLanjutan.map((paragraf) => (
                     <p key={paragraf.slice(0, 24)} data-panel-item>
                       {paragraf}
                     </p>
                   ))}
                 </div>
-
-                <dl
-                  data-panel-item
-                  className="mt-7 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-ink/10 pt-6"
-                >
-                  {identitas.map(({ label, value }) => (
-                    <div key={label}>
-                      <dt className="text-[10.5px] font-bold tracking-[0.14em] text-olive uppercase">
-                        {label}
-                      </dt>
-                      <dd className="mt-1 text-[15px] font-semibold text-ink">{value}</dd>
-                    </div>
-                  ))}
-                </dl>
               </div>
             </div>
           </div>
