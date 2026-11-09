@@ -80,8 +80,8 @@ export default function Hero() {
         SMK IT Ihsanul Fikri — Penerimaan Siswa Baru tahun ajaran 2027/2028
       </h1>
 
-      <div className="mx-auto w-full max-w-[1500px]">
-        <div className="relative">
+      <div className="w-full">
+        <div className="relative w-full">
           <Swiper
             className="psb-swiper aspect-[1500/470] w-full select-none"
             modules={[Autoplay, Keyboard, A11y]}
@@ -90,7 +90,7 @@ export default function Hero() {
             autoplay={
               reducedMotion
                 ? false
-                : { delay: 6000, disableOnInteraction: false, pauseOnMouseEnter: true }
+                : { delay: 8000, disableOnInteraction: false, pauseOnMouseEnter: true }
             }
             keyboard={{ enabled: true }}
             a11y={{
