@@ -16,6 +16,13 @@ const paragrafLanjutan = [
   'Sekolah yang berdiri pada 2011 ini diselenggarakan oleh Yayasan Tarbiyatul Mukmin Pabelan dan berstatus swasta. Program keahlian yang tersedia adalah Teknik Jaringan Komputer dan Telekomunikasi (TJKT), Pengembangan Perangkat Lunak & Gim (PPLG), Desain Komunikasi Visual (DKV). Dengan Bapak Mustain, S.Pd., Gr. sebagai kepala sekolah.',
 ]
 
+const misi = [
+  'Mengembangkan kurikulum dan strategi pembelajaran yang berfokus pada pendidikan karakter dan peningkatan intelektual.',
+  'Membangun lingkungan sekolah yang religius, kompetitif, dan menumbuhkan semangat cinta tanah air.',
+  'Meningkatkan kompetensi guru dengan menumbuhkan budaya kerja profesional.',
+  'Menjalin kerja sama dengan dunia industri dan masyarakat dalam rangka meningkatkan relevansi dan kualitas pendidikan.',
+]
+
 export default function ProfilSekolah() {
   const [expanded, setExpanded] = useState(false)
   const panelId = useId()
@@ -127,6 +134,53 @@ export default function ProfilSekolah() {
             />
           </figure>
         </div>
+
+        <section
+          aria-label="Visi dan Misi"
+          className="mt-12 md:mt-16"
+        >
+          <div className="grid gap-10 md:grid-cols-2 md:gap-12 lg:gap-16">
+            <div>
+              <h3
+                data-reveal
+                className="text-[26px] leading-[1.2] font-bold tracking-tight text-ink sm:text-[30px]"
+              >
+                Visi
+              </h3>
+              <p
+                data-reveal
+                className="mt-4 text-[15.5px] leading-[1.8] text-olive md:text-justify lg:text-[17px]"
+              >
+                “Terwujudnya lulusan yang berkarakter islami, berwawasan kebangsaan dan berdaya
+                saing global.”
+              </p>
+            </div>
+
+            <div>
+              <h3
+                data-reveal
+                className="text-[26px] leading-[1.2] font-bold tracking-tight text-ink sm:text-[30px]"
+              >
+                Misi
+              </h3>
+              <ul className="mt-4 space-y-3">
+                {misi.map((butir) => (
+                  <li
+                    key={butir}
+                    data-reveal
+                    className="flex gap-3 text-[15.5px] leading-[1.75] text-olive md:text-justify lg:text-[17px]"
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="mt-[0.7em] h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
+                    />
+                    <span>{butir}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
   )
