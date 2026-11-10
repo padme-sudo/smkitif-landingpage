@@ -11,57 +11,49 @@ export type NavItem = {
 }
 
 export const navItems: NavItem[] = [
+  { label: 'Home', href: '#home' },
   {
-    label: 'Tentang Kami',
+    label: 'PPDB',
+    href: 'https://www.smkitihsanulfikri.sch.id/ppdb2627/',
+    children: [
+      {
+        label: 'Info PPDB 2026/2027',
+        href: 'https://www.smkitihsanulfikri.sch.id/ppdb2627/',
+      },
+      {
+        label: 'Isi Data Pendaftaran',
+        href: 'https://ppdbsmk.ihsanulfikri.sch.id/',
+      },
+    ],
+  },
+  {
+    label: 'Profil',
     href: '#profil',
     children: [
       {
-        label: 'Tentang Sekolah',
-        href: '#profil',
-        description: 'Sejarah, identitas, dan keunggulan',
-      },
-      {
         label: 'Visi & Misi',
-        href: '#visi-misi',
-        description: 'Arah dan tujuan pendidikan',
+        href: 'https://www.smkitihsanulfikri.sch.id/visi-misi/',
       },
       {
-        label: 'Fasilitas',
-        href: '#fasilitas',
-        description: 'Sarana belajar dan asrama',
-      },
-      {
-        label: 'Prestasi',
-        href: '#prestasi',
-        description: 'Capaian siswa dan sekolah',
+        label: 'Profil Sekolah',
+        href: 'https://www.smkitihsanulfikri.sch.id/profil-sekolah/',
       },
     ],
   },
+  { label: 'Artikel', href: 'https://www.smkitihsanulfikri.sch.id/blog/' },
+  { label: 'Prestasi', href: 'https://www.smkitihsanulfikri.sch.id/prestasi/' },
   {
-    label: 'Program Keahlian',
+    label: 'Akademik',
     href: '#jurusan',
     children: [
       {
-        label: 'Teknik Jaringan Komputer & Telekomunikasi',
-        href: '#jurusan-tjkt',
-        description: 'TJKT',
-      },
-      {
-        label: 'Pengembangan Perangkat Lunak & Gim',
-        href: '#jurusan-pplg',
-        description: 'PPLG',
-      },
-      {
-        label: 'Desain Komunikasi Visual',
-        href: '#jurusan-dkv',
-        description: 'DKV',
+        label: 'Mikrotik Academy',
+        href: 'https://mikrotikacademy.smkitihsanulfikri.sch.id/',
       },
     ],
   },
-  { label: 'Program Unggulan', href: '#program-unggulan' },
-  { label: 'Kegiatan', href: '#kegiatan' },
-  { label: 'Galeri', href: '#galeri' },
-  { label: 'Kontak Kami', href: '#kontak' },
+  { label: 'BKK', href: 'https://bkksmkitihsanulfikri.career.support/' },
+  { label: 'Kontak', href: '#kontak' },
 ]
 
 export const siteInfo = {
@@ -70,6 +62,6 @@ export const siteInfo = {
   address: 'Jl. Blabak–Mendut KM.03, Mungkid, Magelang',
   phone: '(0293) 7182 874',
   phoneHref: 'tel:+622937182874',
-  email: 'admin@smkitihsanulfikri.sch.id',
+  email: 'smkitifmungkid@gmail.com',
   ppdbUrl: 'https://ppdbsmk.ihsanulfikri.sch.id'
 }

@@ -1,11 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { A11y, Autoplay, Keyboard } from 'swiper/modules'
-import type { Swiper as SwiperInstance } from 'swiper'
-import { createTimeline, stagger } from 'animejs'
+import { createTimeline } from 'animejs'
 import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
 import 'swiper/css'
-import { cn } from '@/lib/utils'
 import slide1 from '../assets/img/PSB/1.png'
 import slide2 from '../assets/img/PSB/2.png'
 import slide3 from '../assets/img/PSB/3.png'
@@ -30,16 +28,11 @@ const banners = [
   },
 ]
 
-const arrowBase =
-  'absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/85 text-ink shadow-[0_10px_24px_-14px_rgba(13,47,56,0.55)] backdrop-blur-sm transition hover:bg-white min-[768px]:grid'
-
 export default function Hero() {
-  const [swiper, setSwiper] = useState<SwiperInstance | null>(null)
   const [activeSlide, setActiveSlide] = useState(0)
   const [lightbox, setLightbox] = useState<number | null>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
   const sliderRef = useRef<HTMLDivElement | null>(null)
-  const dotsRef = useRef<HTMLDivElement | null>(null)
   const [reducedMotion] = useState(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
@@ -52,15 +45,6 @@ export default function Hero() {
 
     const timeline = createTimeline({ defaults: { ease: 'out(3)' } })
     timeline.add(slider, { opacity: [0, 1], y: [18, 0], duration: 900 })
-
-    const dots = dotsRef.current
-    if (dots) {
-      timeline.add(
-        Array.from(dots.children),
-        { opacity: [0, 1], y: [10, 0], duration: 420, delay: stagger(60) },
-        320,
-      )
-    }
 
     return () => {
       timeline.revert()
@@ -124,21 +108,20 @@ export default function Hero() {
               prevSlideMessage: 'Banner sebelumnya',
               nextSlideMessage: 'Banner berikutnya',
             }}
-            onSwiper={setSwiper}
             onSlideChange={(instance) => setActiveSlide(instance.realIndex)}
           >
             {banners.map((banner, index) => (
               <SwiperSlide key={banner.src}>
                 <button
                   type="button"
-                  className="group relative block h-full w-full cursor-zoom-in"
+                  className="group relative block h-full w-full cursor-zoom-in overflow-hidden"
                   onClick={() => setLightbox(index)}
                   aria-label={`Perbesar banner ${index + 1} dari ${banners.length}`}
                 >
                   <img
                     src={banner.src}
                     alt={banner.alt}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover object-center"
                     draggable={false}
                     loading={index === 0 ? 'eager' : 'lazy'}
                     fetchPriority={index === 0 ? 'high' : 'auto'}
@@ -155,47 +138,12 @@ export default function Hero() {
             ))}
           </Swiper>
 
-          <button
-            type="button"
-            aria-label="Banner sebelumnya"
-            onClick={() => swiper?.slidePrev()}
-            className={`${arrowBase} left-3`}
+          <div
+            className="pointer-events-none absolute bottom-3 left-3 z-10 rounded-full bg-ink/45 px-2.5 py-1 text-[11px] font-semibold tracking-[0.08em] text-cream/95 tabular-nums backdrop-blur-sm"
+            aria-hidden="true"
           >
-            <ChevronLeft className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            aria-label="Banner berikutnya"
-            onClick={() => swiper?.slideNext()}
-            className={`${arrowBase} right-3`}
-          >
-            <ChevronRight className="h-5 w-5" strokeWidth={2.2} aria-hidden="true" />
-          </button>
-        </div>
-
-        <div
-          ref={dotsRef}
-          className="flex items-center justify-center gap-2 py-4"
-          role="group"
-          aria-label="Navigasi banner"
-        >
-          {banners.map((banner, index) => {
-            const isActive = activeSlide === index
-
-            return (
-              <button
-                key={banner.src}
-                type="button"
-                onClick={() => swiper?.slideToLoop(index)}
-                aria-label={`Buka banner ${index + 1} dari ${banners.length}`}
-                aria-current={isActive ? 'true' : undefined}
-                className={cn(
-                  'h-2 rounded-full transition-all duration-300',
-                  isActive ? 'w-8 bg-gold' : 'w-2 bg-ink/25 hover:bg-ink/50',
-                )}
-              />
-            )
-          })}
+            {String(activeSlide + 1).padStart(2, '0')} / {String(banners.length).padStart(2, '0')}
+          </div>
         </div>
 
         <p className="sr-only" aria-live="polite">

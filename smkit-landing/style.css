@@ -1,0 +1,16 @@
+/*
+Theme Name: SMK IT Ihsanul Fikri Landing
+Theme URI: https://smkitihsanulfikri.sch.id/
+Author: SMK IT Ihsanul Fikri Mungkid
+Description: Tema minimal untuk menampilkan landing page React (Vite build) sebagai halaman depan WordPress.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 7.4
+Text Domain: smkit-landing
+*/
+
+/*
+ * Gaya utama landing page dimuat dari hasil build Vite (folder landing/assets/*.css).
+ * File ini hanya menyediakan header tema yang diwajibkan WordPress.
+ */

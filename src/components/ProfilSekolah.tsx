@@ -67,9 +67,14 @@ export default function ProfilSekolah() {
               >
                 Profil Sekolah
               </h2>
+              <span
+                data-reveal
+                className="mt-3 block h-[3px] w-14 rounded-full bg-gold"
+                aria-hidden="true"
+              />
               <p
                 data-reveal
-                className="mt-1.5 text-[12.5px] font-medium tracking-[0.18em] text-olive uppercase lg:text-[15px]"
+                className="mt-2 text-[12.5px] font-medium tracking-[0.18em] text-olive uppercase lg:text-[15px]"
               >
                 SMK IT Ihsanul Fikri Mungkid
               </p>
@@ -136,6 +141,7 @@ export default function ProfilSekolah() {
         </div>
 
         <section
+          id="visi-misi"
           aria-label="Visi dan Misi"
           className="mt-12 md:mt-16"
         >
@@ -147,6 +153,11 @@ export default function ProfilSekolah() {
               >
                 Visi
               </h3>
+              <span
+                data-reveal
+                className="mt-2.5 block h-[3px] w-10 rounded-full bg-gold"
+                aria-hidden="true"
+              />
               <p
                 data-reveal
                 className="mt-4 text-[15.5px] leading-[1.8] text-olive md:text-justify lg:text-[17px]"
@@ -163,6 +174,11 @@ export default function ProfilSekolah() {
               >
                 Misi
               </h3>
+              <span
+                data-reveal
+                className="mt-2.5 block h-[3px] w-10 rounded-full bg-gold"
+                aria-hidden="true"
+              />
               <ul className="mt-4 space-y-3">
                 {misi.map((butir) => (
                   <li
