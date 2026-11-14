@@ -5,7 +5,7 @@ const mapsUrl =
   'https://www.google.com/maps/search/?api=1&query=SMK+IT+Ihsanul+Fikri+Mungkid'
 
 const whatsappUrl =
-  'https://wa.me/6285725728234?text=' +
+  'https://wa.me/082220930193?text=' +
   encodeURIComponent(
     "Assalamu'alaikum, saya ingin bertanya tentang PPDB SMK IT Ihsanul Fikri Mungkid.",
   )
